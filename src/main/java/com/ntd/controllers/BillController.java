@@ -63,10 +63,10 @@ public class BillController {
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Bill> updateBill(@RequestBody Bill updatedBill){
+    public ResponseEntity<Bill> updateBill(@RequestBody Bill updatedBill, @PathVariable("id") int id){
         ResponseEntity<Bill> response = null;
 
-        if(bServ.ifBillExists(updatedBill.getBillId())){
+        if(bServ.ifBillExists(updatedBill.getBillId()) && updatedBill.getBillId() == id){
             // bill exists
             bServ.updateBill(updatedBill);
             response = new ResponseEntity<Bill>(updatedBill, HttpStatus.OK); // 200
