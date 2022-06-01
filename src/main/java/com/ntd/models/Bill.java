@@ -30,4 +30,7 @@ public class Bill {
     @Column
     private boolean isPaid;
 
+    @Column
+    private User user;
+
 }

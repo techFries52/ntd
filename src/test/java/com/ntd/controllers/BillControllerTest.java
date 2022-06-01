@@ -1,7 +1,10 @@
 package com.ntd.controllers;
 
 import com.ntd.models.Bill;
+import com.ntd.models.User;
+import com.ntd.services.UserService;
 import org.junit.jupiter.api.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -14,6 +17,10 @@ public class BillControllerTest extends AbstractTest {
 
     String uri = "/bill";
     int billId = 999;
+    User testUser = new User();
+
+    @Autowired
+    UserService uServ;
 
     @BeforeAll
     static void setUpBeforeClass() throws Exception {
@@ -41,7 +48,7 @@ public class BillControllerTest extends AbstractTest {
     void testSaveBill() throws Exception {
         int expectedStatus = 201;
 
-        Bill bill = new Bill(billId, "TestCompany",9.99, LocalDate.now(),false);
+        Bill bill = new Bill(billId, "TestCompany",9.99, LocalDate.now(),false,testUser);
         String jsonBill = super.mapToJson(bill);
 
         MvcResult mvcRS = mockMvc.perform(MockMvcRequestBuilders.post(uri)
@@ -58,7 +65,7 @@ public class BillControllerTest extends AbstractTest {
     void testSaveBillAlreadyExist() throws Exception{
         int expectedStatus = 409;
 
-        Bill bill = new Bill(billId, "TestCompany",9.99, LocalDate.now(),false);
+        Bill bill = new Bill(billId, "TestCompany",9.99, LocalDate.now(),false, testUser);
         String jsonBill = super.mapToJson(bill);
 
         MvcResult mvcRS = mockMvc.perform(MockMvcRequestBuilders.post(uri)
@@ -75,7 +82,7 @@ public class BillControllerTest extends AbstractTest {
     void testUpdateBill() throws Exception {
         int expectedStatus = 200;
 
-        Bill bill = new Bill(billId, "TestCompany",9.99, LocalDate.now(),true);
+        Bill bill = new Bill(billId, "TestCompany",9.99, LocalDate.now(),true, testUser);
         String jsonBill = super.mapToJson(bill);
 
         MvcResult mvcRS = mockMvc.perform(MockMvcRequestBuilders.put(uri + "/" + bill.getBillId())
@@ -92,7 +99,7 @@ public class BillControllerTest extends AbstractTest {
     void testUpdateBillDoesntExist() throws Exception {
         int expectedStatus = 404;
 
-        Bill bill = new Bill(billId, "TestCompany",9.99, LocalDate.now(),false);
+        Bill bill = new Bill(billId, "TestCompany",9.99, LocalDate.now(),false, testUser);
         String jsonBill = super.mapToJson(bill);
 
         MvcResult mvcRS = mockMvc.perform(MockMvcRequestBuilders.put(uri+ "/" + bill.getBillId())
@@ -108,7 +115,7 @@ public class BillControllerTest extends AbstractTest {
     void testGetSingleBill() throws Exception {
         int expectedStatus = 200;
 
-        Bill bill = new Bill(billId, "TestCompany",9.99, LocalDate.now(),false);
+        Bill bill = new Bill(billId, "TestCompany",9.99, LocalDate.now(),false, testUser);
 
         MvcResult mvcRS = mockMvc.perform(MockMvcRequestBuilders.get(uri + "/" + bill.getBillId())
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
@@ -152,7 +159,7 @@ public class BillControllerTest extends AbstractTest {
     void testGetBillThatDoesntExist() throws Exception {
         int expectedStatus = 404;
 
-        Bill bill = new Bill(billId, "TestCompany",9.99, LocalDate.now(),false);
+        Bill bill = new Bill(billId, "TestCompany",9.99, LocalDate.now(),false, testUser);
 
         MvcResult mvcRS = mockMvc.perform(MockMvcRequestBuilders.get(uri + "/" + bill.getBillId())
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
@@ -168,7 +175,7 @@ public class BillControllerTest extends AbstractTest {
     void testDeleteBill() throws Exception {
         int expectedStatus = 200;
 
-        Bill bill = new Bill(billId, "TestCompany",9.99, LocalDate.now(),false);
+        Bill bill = new Bill(billId, "TestCompany",9.99, LocalDate.now(),false, testUser);
 
         MvcResult mvcRS = mockMvc.perform(MockMvcRequestBuilders.delete(uri + "/" + bill.getBillId())
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
