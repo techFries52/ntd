@@ -36,7 +36,7 @@ public class BillControllerTest extends AbstractTest {
     }
 
     @Test
-    @Order(1)
+    @Order(2)
     @DisplayName("Save Bill to DB")
     void testSaveBill() throws Exception {
         int expectedStatus = 201;
@@ -53,7 +53,7 @@ public class BillControllerTest extends AbstractTest {
     }
 
     @Test
-    @Order(2)
+    @Order(3)
     @DisplayName("Save bill but it already exists")
     void testSaveBillAlreadyExist() throws Exception{
         int expectedStatus = 409;
@@ -70,7 +70,7 @@ public class BillControllerTest extends AbstractTest {
     }
 
     @Test
-    @Order(3)
+    @Order(4)
     @DisplayName("Update bill")
     void testUpdateBill() throws Exception {
         int expectedStatus = 200;
@@ -87,7 +87,7 @@ public class BillControllerTest extends AbstractTest {
     }
 
     @Test
-    @Order(9)
+    @Order(10)
     @DisplayName("Update bill that does not exist")
     void testUpdateBillDoesntExist() throws Exception {
         int expectedStatus = 404;
@@ -103,7 +103,7 @@ public class BillControllerTest extends AbstractTest {
         assertEquals(expectedStatus, actualStatus);
     }
     @Test
-    @Order(4)
+    @Order(5)
     @DisplayName("Get single bill")
     void testGetSingleBill() throws Exception {
         int expectedStatus = 200;
@@ -119,7 +119,7 @@ public class BillControllerTest extends AbstractTest {
     }
 
     @Test
-    @Order(5)
+    @Order(6)
     @DisplayName("Get all Bills")
     void testGetAllBills() throws Exception {
         int expectedStatus = 200;
@@ -133,14 +133,21 @@ public class BillControllerTest extends AbstractTest {
     }
 
     @Test
-    @Order(6)
+    @Order(1)
     @DisplayName("Get All Bills when there is none")
     void testGetAllBillsEqualsZero() throws Exception {
+        int expectedStatus = 204;
 
+        MvcResult mvcRS = mockMvc.perform(MockMvcRequestBuilders.get(uri)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andReturn();
+
+        int actualStatus = mvcRS.getResponse().getStatus();
+        assertEquals(expectedStatus, actualStatus);
     }
 
     @Test
-    @Order(8)
+    @Order(9)
     @DisplayName("Get Bill that does not exist")
     void testGetBillThatDoesntExist() throws Exception {
         int expectedStatus = 404;
@@ -156,7 +163,7 @@ public class BillControllerTest extends AbstractTest {
     }
 
     @Test
-    @Order(7)
+    @Order(8)
     @DisplayName("Delete Bill")
     void testDeleteBill() throws Exception {
         int expectedStatus = 200;
