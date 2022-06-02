@@ -4,9 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.time.LocalDate;
 
 @Entity
@@ -30,7 +28,8 @@ public class Bill {
     @Column
     private boolean isPaid;
 
-    @Column
+    @ManyToOne
+    @JoinColumn(name="user_id", nullable = false)
     private User user;
 
 }

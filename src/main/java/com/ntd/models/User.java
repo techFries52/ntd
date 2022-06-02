@@ -4,8 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Data
@@ -14,5 +14,9 @@ import javax.persistence.Id;
 public class User {
 
     @Id
-    int userId;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    int user_id;
+
+    @OneToMany(mappedBy = "user")
+    Set<Bill> bills;
 }
