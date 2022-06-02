@@ -2,12 +2,15 @@ package com.ntd.controllers;
 
 import com.ntd.models.Bill;
 import com.ntd.services.BillService;
+import com.ntd.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @RequestMapping(value = "bill")
@@ -15,6 +18,9 @@ public class BillController {
 
     @Autowired
     BillService bServ;
+
+    @Autowired
+    UserService uServ;
 
     @GetMapping
     public ResponseEntity<List<Bill>> getAllBills(){
@@ -90,6 +96,53 @@ public class BillController {
         } else {
             // bill does not exist
             response = new ResponseEntity<Bill>(bill, HttpStatus.NOT_FOUND); // 404
+        }
+        return response;
+    }
+
+    @GetMapping("unpaid/{user_id}")
+    public ResponseEntity<Set<Bill>> getAllUnpaidbillsByUser(@PathVariable("user_id") int user_id){
+        ResponseEntity<Set<Bill>> response = null;
+        Set<Bill> unpaidBills = null;
+
+        if(uServ.ifUserExists(user_id)){
+            // user does exist
+            unpaidBills = bServ.getAllUnpaidBillsByUser(user_id);
+
+            if(unpaidBills.size() > 0){
+                response = new ResponseEntity<Set<Bill>>(unpaidBills, HttpStatus.OK); //200
+            } else {
+                response = new ResponseEntity<Set<Bill>>(unpaidBills, HttpStatus.NO_CONTENT); // 204
+            }
+
+        } else {
+            // user does not exist
+            unpaidBills= new HashSet<>();
+            response = new ResponseEntity<Set<Bill>>(unpaidBills, HttpStatus.NOT_FOUND); // 404
+        }
+
+        return response;
+    }
+
+    @GetMapping("paid/{user_id}")
+    public ResponseEntity<Set<Bill>> getAllPaidBillsByUser(@PathVariable("user_id") int user_id){
+        ResponseEntity<Set<Bill>> response = null;
+        Set<Bill> paidBills = null;
+
+        if(uServ.ifUserExists(user_id)){
+            // user does exist
+            paidBills = bServ.getAllPaidBillsByUser(user_id);
+
+            if(paidBills.size() > 0){
+                response = new ResponseEntity<Set<Bill>>(paidBills, HttpStatus.OK); // 200
+            } else {
+                response = new ResponseEntity<Set<Bill>>(paidBills, HttpStatus.NO_CONTENT); // 204
+            }
+
+        } else {
+            // user does not exist
+            paidBills = new HashSet<Bill>();
+            response = new ResponseEntity<Set<Bill>>(paidBills, HttpStatus.NOT_FOUND); // 404
         }
         return response;
     }
