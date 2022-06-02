@@ -18,7 +18,7 @@ public class UserController {
     public ResponseEntity<User> saveNewUser(@RequestBody User newUser){
         ResponseEntity<User> response = null;
 
-        if(uServ.ifUserExists(newUser.getUserId())){
+        if(uServ.ifUserExists(newUser.getUser_id())){
             // user already exists
             response = new ResponseEntity<User>(newUser, HttpStatus.CONFLICT); // 409
         } else {
