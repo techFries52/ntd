@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class BillServiceImpl implements BillService {
@@ -38,12 +40,31 @@ public class BillServiceImpl implements BillService {
     @Override
     public Bill getBillById(int billId) {
         Optional<Bill> bill = bRepo.findById(billId);
-        return bill.get();
+        Bill checkedBill = new Bill();
+
+        if(bill.isPresent()){
+            checkedBill = bill.get();
+        }
+
+        return checkedBill;
     }
 
     @Override
     public List<Bill> getAllBills() {
-        List<Bill> bills = bRepo.findAll();
-        return bills;
+        return bRepo.findAll();
+    }
+
+    @Override
+    public Set<Bill> getAllUnpaidBillsByUser(int user_id) {
+        return bRepo.findAll().stream()
+                .filter( bill -> !bill.isPaid() && bill.getUser().getUser_id() == user_id)
+                .collect(Collectors.toSet());
+    }
+
+    @Override
+    public Set<Bill> getAllPaidBillsByUser(int user_id) {
+        return bRepo.findAll().stream()
+                .filter( bill -> bill.isPaid() && bill.getUser().getUser_id() == user_id)
+                .collect(Collectors.toSet());
     }
 }
