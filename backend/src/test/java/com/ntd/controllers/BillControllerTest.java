@@ -9,6 +9,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import java.sql.Date;
 import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -48,7 +49,7 @@ public class BillControllerTest extends AbstractTest {
     void testSaveBill() throws Exception {
         int expectedStatus = 201;
 
-        Bill bill = new Bill(billId, "testname", "TestCompany",9.99, LocalDate.now(),false,testUser);
+        Bill bill = new Bill(billId, "testname", "TestCompany",9.99, new Date(System.currentTimeMillis()),false,testUser);
         String jsonBill = super.mapToJson(bill);
 
         MvcResult mvcRS = mockMvc.perform(MockMvcRequestBuilders.post(uri)
@@ -65,7 +66,7 @@ public class BillControllerTest extends AbstractTest {
     void testSaveBillAlreadyExist() throws Exception{
         int expectedStatus = 409;
 
-        Bill bill = new Bill(billId, "testName", "TestCompany",9.99, LocalDate.now(),false, testUser);
+        Bill bill = new Bill(billId, "testName", "TestCompany",9.99, new Date(System.currentTimeMillis()),false, testUser);
         String jsonBill = super.mapToJson(bill);
 
         MvcResult mvcRS = mockMvc.perform(MockMvcRequestBuilders.post(uri)
@@ -82,7 +83,7 @@ public class BillControllerTest extends AbstractTest {
     void testUpdateBill() throws Exception {
         int expectedStatus = 200;
 
-        Bill bill = new Bill(billId, "testName", "TestCompany",9.99, LocalDate.now(),true, testUser);
+        Bill bill = new Bill(billId, "testName", "TestCompany",9.99, new Date(System.currentTimeMillis()),true, testUser);
         String jsonBill = super.mapToJson(bill);
 
         MvcResult mvcRS = mockMvc.perform(MockMvcRequestBuilders.put(uri + "/" + bill.getBillId())
@@ -99,7 +100,7 @@ public class BillControllerTest extends AbstractTest {
     void testUpdateBillDoesntExist() throws Exception {
         int expectedStatus = 404;
 
-        Bill bill = new Bill(billId, "testName", "TestCompany",9.99, LocalDate.now(),false, testUser);
+        Bill bill = new Bill(billId, "testName", "TestCompany",9.99, new Date(System.currentTimeMillis()),false, testUser);
         String jsonBill = super.mapToJson(bill);
 
         MvcResult mvcRS = mockMvc.perform(MockMvcRequestBuilders.put(uri+ "/" + bill.getBillId())
@@ -115,7 +116,7 @@ public class BillControllerTest extends AbstractTest {
     void testGetSingleBill() throws Exception {
         int expectedStatus = 200;
 
-        Bill bill = new Bill(billId, "testName", "TestCompany",9.99, LocalDate.now(),false, testUser);
+        Bill bill = new Bill(billId, "testName", "TestCompany",9.99, new Date(System.currentTimeMillis()),false, testUser);
 
         MvcResult mvcRS = mockMvc.perform(MockMvcRequestBuilders.get(uri + "/" + bill.getBillId())
                 .contentType(MediaType.APPLICATION_JSON_VALUE))
@@ -159,7 +160,7 @@ public class BillControllerTest extends AbstractTest {
     void testGetBillThatDoesntExist() throws Exception {
         int expectedStatus = 404;
 
-        Bill bill = new Bill(billId, "testName", "TestCompany",9.99, LocalDate.now(),false, testUser);
+        Bill bill = new Bill(billId, "testName", "TestCompany",9.99, new Date(System.currentTimeMillis()),false, testUser);
 
         MvcResult mvcRS = mockMvc.perform(MockMvcRequestBuilders.get(uri + "/" + bill.getBillId())
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
@@ -175,7 +176,7 @@ public class BillControllerTest extends AbstractTest {
     void testDeleteBill() throws Exception {
         int expectedStatus = 200;
 
-        Bill bill = new Bill(billId, "testName", "TestCompany",9.99, LocalDate.now(),false, testUser);
+        Bill bill = new Bill(billId, "testName", "TestCompany",9.99, new Date(System.currentTimeMillis()),false, testUser);
 
         MvcResult mvcRS = mockMvc.perform(MockMvcRequestBuilders.delete(uri + "/" + bill.getBillId())
                         .contentType(MediaType.APPLICATION_JSON_VALUE))

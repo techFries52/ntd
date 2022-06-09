@@ -27,10 +27,12 @@ CREATE TABLE todo.users (
 
 CREATE TABLE todo.categories (
     category_id SERIAL PRIMARY KEY,
+    user_id INT NOT NULL,
     category_name VARCHAR(255),
     date_created DATE,
     date_modified DATE,
-    color VARCHAR(100)
+    color VARCHAR(100),
+    FOREIGN KEY (user_id) REFERENCES todo.users(user_id)
 );
 
 CREATE TABLE todo.items (
@@ -67,11 +69,11 @@ VALUES
 ('Jesse@example.com', 'jesse123', 'Jesse', 'Lauesen', NOW())
 ;
 
-INSERT INTO todo.categories (category_name, color, date_created, date_modified)
+INSERT INTO todo.categories (user_id, category_name, color, date_created, date_modified)
 VALUES
-('Cleaning', 'Blue', NOW(), NOW()),
-('Work', 'Light Green', NOW(), NOW()),
-('Personal', 'light red', '2022/05/10', '2022/06/01')
+(1, 'Cleaning', 'Blue', NOW(), NOW()),
+(1, 'Work', 'Light Green', NOW(), NOW()),
+(1, 'Personal', 'light red', '2022/05/10', '2022/06/01')
 ;
 
 INSERT INTO todo.items (user_id, category_id, item_name, repetition, notes, completed, item_priority, date_created, date_modified)
