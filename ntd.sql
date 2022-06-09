@@ -1,13 +1,20 @@
+--NOTES FOR PROBLEMS I RAN INTO THEN FIXED
+
+--tables werent actually being created so I had to 
+--add todo.[tablename] in order to have them added to 
+--the correct schema
+
+
 CREATE SCHEMA IF NOT EXISTS todo;
 
 
-DROP TABLE IF EXISTS users CASCADE;
-DROP TABLE IF EXISTS items CASCADE;
-DROP TABLE IF EXISTS categories CASCADE;
-DROP TABLE IF EXISTS bills CASCADE;
+DROP TABLE IF EXISTS todo.users CASCADE;
+DROP TABLE IF EXISTS todo.items CASCADE;
+DROP TABLE IF EXISTS todo.categories CASCADE;
+DROP TABLE IF EXISTS todo.bills CASCADE;
 
-CREATE TABLE users (
-    id SERIAL PRIMARY KEY,
+CREATE TABLE todo.users (
+    user_id SERIAL PRIMARY KEY,
     email VARCHAR(255) NOT NULL,
     f_name VARCHAR(255) NOT NULL,
     l_name VARCHAR(255) NOT NULL,
@@ -18,7 +25,7 @@ CREATE TABLE users (
 
 
 
-CREATE TABLE categories (
+CREATE TABLE todo.categories (
     category_id SERIAL PRIMARY KEY,
     category_name VARCHAR(255),
     date_created DATE,
@@ -26,7 +33,7 @@ CREATE TABLE categories (
     color VARCHAR(100)
 );
 
-CREATE TABLE items (
+CREATE TABLE todo.items (
     item_id SERIAL PRIMARY KEY,
     user_id INT NOT NULL,
     category_id INT NOT NULL,
@@ -39,34 +46,35 @@ CREATE TABLE items (
     date_completed DATE,
     date_modified DATE,
     due_date DATE,
-    FOREIGN KEY (user_id) REFERENCES users(id),
-    FOREIGN KEY (category_id) REFERENCES categories(category_id)
+    FOREIGN KEY (user_id) REFERENCES todo.users(user_id),
+    FOREIGN KEY (category_id) REFERENCES todo.categories(category_id)
 );
 
-CREATE TABLE bills (
+CREATE TABLE todo.bills (
     bill_id SERIAL PRIMARY KEY,
     user_id INT NOT NULL,
     bill_name VARCHAR(255),
     company VARCHAR(255),
     amount FLOAT,
     bill_due_date DATE,
-    is_paid BOOLEAN
+    is_paid BOOLEAN,
+    FOREIGN KEY (user_id) REFERENCES todo.users(user_id)
 );
 
-INSERT INTO users (email, password, f_name, l_name, created)
+INSERT INTO todo.users (email, password, f_name, l_name, created)
 VALUES
 ('nick@example.com', 'nick123', 'Nick', 'Card', NOW()),
 ('Jesse@example.com', 'jesse123', 'Jesse', 'Lauesen', NOW())
 ;
 
-INSERT INTO categories (category_name, color, date_created, date_modified)
+INSERT INTO todo.categories (category_name, color, date_created, date_modified)
 VALUES
 ('Cleaning', 'Blue', NOW(), NOW()),
 ('Work', 'Light Green', NOW(), NOW()),
 ('Personal', 'light red', '2022/05/10', '2022/06/01')
 ;
 
-INSERT INTO items (user_id, category_id, item_name, repetition, notes, completed, item_priority, date_created, date_modified)
+INSERT INTO todo.items (user_id, category_id, item_name, repetition, notes, completed, item_priority, date_created, date_modified)
 VALUES
 (1, 1, 'Do the Dishes', 'Weekly','I just need to do the dishes', FALSE, 'HIGH', NOW(), NOW()),
 (1, 1, 'Clean Bedroom', 'Weekly', 'need to clean this after the dishes', TRUE, 'HIGH', '2022/06/01', '2022/06/01'),
@@ -75,7 +83,7 @@ VALUES
 (1, 3, 'Workout', 'Calisthenic Day', 'daily', FALSE, 'HIGH', NOW(), NOW())
 ;
 
-INSERT INTO bills (user_id, bill_name, company, amount, bill_due_date, is_paid)
+INSERT INTO todo.bills (user_id, bill_name, company, amount, bill_due_date, is_paid)
 VALUES
 (2, 'Internet', 'Xfinity', 75, '2022/06/23', FALSE),
 (2, 'Rent', 'Apartment Complex', 75, '2022/07/01', FALSE),

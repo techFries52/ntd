@@ -5,27 +5,34 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.sql.Date;
 import java.time.LocalDate;
 
 @Entity
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "bills")
 public class Bill {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name="bill_id", unique = true, nullable = false)
     private int billId;
+
+    @Column(name="bill_name")
+    private String billName;
 
     @Column
     private String company;
 
-    @Column
+    @Column(name="amount")
     private double amountOfBill;
 
-    @Column
-    private LocalDate dueDate;
+    @Column(name="bill_due_date")
+    private Date dueDate;
 
-    @Column
+    @Column(name="is_paid")
     private boolean isPaid;
 
     @ManyToOne
